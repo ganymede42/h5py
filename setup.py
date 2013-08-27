@@ -19,10 +19,9 @@ def getVersion(forceUpdate=False):
   res=p.stdout.readlines()
   ver=len(res)
   ver='2.2.0b1.'+str(ver)
-  gitcmt=res[0][:7]
+  gitcmt=str(res[0][:7])
   return (ver,gitcmt)
 VERSION,COMMITHASH = getVersion()
-
 
 # --- Autodetect Cython -------------------------------------------------------
 
