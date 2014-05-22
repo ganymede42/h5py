@@ -18,14 +18,18 @@ import numpy, subprocess
 import configure   # Sticky-options configuration and version auto-detect
 
 def getVersion(forceUpdate=False):
-  argv=sys.argv
-  p = subprocess.Popen('git rev-list HEAD', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  #p = subprocess.Popen('git rev-list HEAD', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  #retval = p.wait()
+  #res=p.stdout.readlines()
+  #ver=len(res)
+  #ver='2.3.0.'+str(ver)
+  #gitcmt=str(res[0][:7])
+  #return (ver,gitcmt)
+  p = subprocess.Popen('git describe  --tags --match ''*.*.*'' --long', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   retval = p.wait()
-  res=p.stdout.readlines()
-  ver=len(res)
-  ver='2.2.0b1.'+str(ver)
-  gitcmt=str(res[0][:7])
-  return (ver,gitcmt)
+  res=p.stdout.readline()
+  ver=res[:-1].rsplit('-',1)
+  return (ver[0],ver[1])
 VERSION,COMMITHASH = getVersion()
 
 # --- Encapsulate NumPy imports in a specialized Extension type ---------------

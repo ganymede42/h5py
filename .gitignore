@@ -20,3 +20,6 @@ h5py/unused.api_*
 .DS_Store
 /docs/_build
 /docs_api/_build
+.project
+.pydevproject
+h5py.egg-info/
