@@ -286,7 +286,7 @@ cdef class GroupID(ObjectID):
         else:
             remote_id = remote.id
 
-        H5Glink2(self.id, current_name, <H5G_link_t>link_type, remote_id, new_name)
+        H5Glink2(self.id, current_name, <H5L_type_t>link_type, remote_id, new_name)
 
 
     def unlink(self, char* name):

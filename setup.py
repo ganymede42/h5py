@@ -17,20 +17,40 @@ import numpy, subprocess
 
 import configure   # Sticky-options configuration and version auto-detect
 
-def getVersion(forceUpdate=False):
-  #p = subprocess.Popen('git rev-list HEAD', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  #retval = p.wait()
-  #res=p.stdout.readlines()
-  #ver=len(res)
-  #ver='2.3.0.'+str(ver)
-  #gitcmt=str(res[0][:7])
-  #return (ver,gitcmt)
-  p = subprocess.Popen('git describe  --tags --match ''*.*.*'' --long', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  retval = p.wait()
-  res=p.stdout.readline()
-  ver=res[:-1].rsplit('-',1)
-  return (ver[0],ver[1])
-VERSION,COMMITHASH = getVersion()
+def getVersion():
+  #for dirname, dirnames, filenames in os.walk('.'):
+  #  for subdirname in dirnames:
+  #    print os.path.join(dirname, subdirname)
+  #  for filename in filenames:
+  #    print os.path.join(dirname, filename)
+  
+  fn='./PKG-INFO'
+  print 'getVersion() -> seek for %s in %s...'%(fn,os.getcwd())
+  if os.access(fn, os.R_OK):
+    sys.stdout.write('getVersion() -> Parsing '+fn+' -> ')
+    fo=open(fn,'r')
+    for ln in fo.readlines():
+      if ln.startswith('Version:'):
+        ver=re.match('Version:\s*(\S*)', ln).group(1)
+      elif ln.startswith('Summary:'):
+        #print ln
+        gitcmt=re.search('\(git:(.*)\)', ln).group(1)
+    fo.close()
+  else:
+    argv=sys.argv
+    sys.stdout.write('getVersion() -> using git command -> ')
+    p = subprocess.Popen("git describe  --tags --match '*.*.*' --long", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    retval = p.wait()
+    if retval==0:
+      res=p.stdout.readline()
+      res=res[:-1].rsplit('-',1)
+      ver=res[0]
+      gitcmt=res[1][1:]
+    else:
+      print p.stdout.readlines()
+      (ver,gitcmt)=('0.0.0','???')
+  print ':'+ver+':'+gitcmt+':'
+  return (ver,gitcmt)
 
 # --- Encapsulate NumPy imports in a specialized Extension type ---------------
 
@@ -310,6 +330,7 @@ if any('--' + opt in sys.argv for opt in Distribution.display_option_names + ['h
 else:
     setup_requires = ['numpy >=1.0.1']
 
+VERSION, COMMITHASH = getVersion()
 setup(
   name = 'h5py',
   version = VERSION,

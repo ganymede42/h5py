@@ -14,7 +14,7 @@ hdf5:
   hid_t     H5Dcreate_anon(hid_t file_id, hid_t type_id, hid_t space_id, hid_t plist_id, hid_t dapl_id)
 
   hid_t     H5Dopen(hid_t file_id, const char *name)
-  hid_t     H5Dopen2(hid_t loc_id, char *name, hid_t dapl_id )
+  hid_t     H5Dopen2(hid_t file_id, const char *name, hid_t dapl_id)
   herr_t    H5Dclose(hid_t dset_id)
 
   hid_t     H5Dget_space(hid_t dset_id)
@@ -56,7 +56,7 @@ hdf5:
   ssize_t   H5Fget_name(hid_t obj_id, char *name, size_t size)
   ssize_t   H5Fget_obj_count(hid_t file_id, unsigned types)
   ssize_t   H5Fget_obj_ids(hid_t file_id, unsigned types, size_t max_objs, hid_t *obj_id_list)
-  herr_t    H5Fget_vfd_handle(hid_t file_id, hid_t fapl_id, void **file_handle)
+  herr_t    H5Fget_vfd_handle(hid_t file_id, hid_t fapl, void **file_handle)
 
   herr_t    H5Fget_intent(hid_t file_id, unsigned *intent)
 
@@ -72,7 +72,7 @@ hdf5:
 
   hid_t     H5Gopen(hid_t loc_id, const char *name)
   herr_t    H5Gclose(hid_t group_id)
-  herr_t    H5Glink2(hid_t cur_loc_id, const char *cur_name, H5G_link_t link_type, hid_t new_loc_id, const char *new_name)
+  herr_t    H5Glink2(hid_t cur_loc_id, const char *cur_name, H5L_type_t type_id, hid_t new_loc_id, const char *new_name)
 
   herr_t    H5Gunlink(hid_t loc_id, const char *name)
   herr_t    H5Gmove2(hid_t src_loc_id, const char *src_name, hid_t dst_loc_id, const char *dst_name)
@@ -123,7 +123,7 @@ hdf5:
   herr_t    H5Oget_info_by_name(hid_t loc_id, const char *name, H5O_info_t *oinfo, hid_t lapl_id)
   herr_t    H5Oget_info_by_idx(hid_t loc_id, const char *group_name, H5_index_t idx_type, H5_iter_order_t order, hsize_t n, H5O_info_t *oinfo, hid_t lapl_id)
 
-  1.8.5 htri_t H5Oexists_by_name(hid_t loc_id, char * name, hid_t lapl_id )
+  1.8.5 htri_t H5Oexists_by_name(hid_t loc_id, const char *name, hid_t lapl_id)
   herr_t    H5Olink(hid_t obj_id, hid_t new_loc_id, const char *new_name, hid_t lcpl_id, hid_t lapl_id)
   herr_t    H5Ocopy(hid_t src_loc_id, const char *src_name, hid_t dst_loc_id, const char *dst_name, hid_t ocpypl_id, hid_t lcpl_id)
 
@@ -165,7 +165,7 @@ hdf5:
   hid_t     H5Pget_driver(hid_t plist_id)
 
   # Dataset creation properties
-  herr_t    H5Pset_layout(hid_t plist_id, int layout)
+  herr_t    H5Pset_layout(hid_t plist_id, H5D_layout_t layout)
   H5D_layout_t H5Pget_layout(hid_t plist_id)
   herr_t    H5Pset_chunk(hid_t plist_id, int ndims, const hsize_t *dim)
   int       H5Pget_chunk(hid_t plist_id, int max_ndims, hsize_t *dim)
@@ -334,7 +334,7 @@ hdf5:
   hid_t     H5Tget_member_type(hid_t type_id, unsigned membno)
   size_t    H5Tget_member_offset(hid_t type_id, unsigned membno)
   int       H5Tget_member_index(hid_t type_id, const char *name)
-  herr_t    H5Tinsert(hid_t parent_id, char *name, size_t offset, hid_t member_id)
+  herr_t    H5Tinsert(hid_t parent_id, const char *name, size_t offset, hid_t member_id)
   herr_t    H5Tpack(hid_t type_id)
 
   # Enumerated types

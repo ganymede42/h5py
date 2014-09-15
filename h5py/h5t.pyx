@@ -1335,8 +1335,8 @@ cdef TypeCompoundID _c_complex(dtype dt):
         raise TypeError("Illegal length %d for complex dtype" % length)
 
     tid = H5Tcreate(H5T_COMPOUND, size)
-    H5Tinsert(tid, cfg._r_name, off_r, tid_sub)
-    H5Tinsert(tid, cfg._i_name, off_i, tid_sub)
+    H5Tinsert(tid, <char*>cfg._r_name, off_r, tid_sub)
+    H5Tinsert(tid, <char*>cfg._i_name, off_i, tid_sub)
 
     return TypeCompoundID(tid)
 
@@ -1360,7 +1360,7 @@ cdef TypeCompoundID _c_compound(dtype dt, int logical):
         dt_tmp = dt.fields[name][0]
         type_tmp = py_create(dt_tmp, logical=logical)
         H5Tset_size(tid, offset+type_tmp.get_size())
-        H5Tinsert(tid, ename, offset, type_tmp.id)
+        H5Tinsert(tid, <char*>ename, offset, type_tmp.id)
         offset += type_tmp.get_size()
 
     return TypeCompoundID(tid)
