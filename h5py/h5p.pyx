@@ -382,7 +382,7 @@ cdef class PropDCID(PropOCID):
         - h5d.CONTIGUOUS
         - h5d.CHUNKED
         """
-        H5Pset_layout(self.id, layout_code)
+        H5Pset_layout(self.id, <H5D_layout_t>layout_code)
 
 
     @with_phil

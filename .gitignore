@@ -20,3 +20,8 @@ MANIFEST
 /.tox
 /h5py.egg-info
 /*.egg
+*~
+h5py/new.api_*
+h5py/unused.api_*
+.project
+.pydevproject
